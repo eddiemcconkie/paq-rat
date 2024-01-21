@@ -1,0 +1,7 @@
+DEFINE TABLE migration SCHEMAFULL
+  PERMISSIONS NONE
+;
+
+DEFINE FIELD name ON migration
+  TYPE string
+;

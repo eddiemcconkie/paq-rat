@@ -1,0 +1,46 @@
+#V2
+info for db
+info for ns
+info for root
+quit
+exit
+q
+info for root
+info for ns
+info for db
+info for ns
+SIGTERM
+info for root
+info for ns
+info for db
+select * from user
+info for db
+info for table user
+info for db
+info for table user
+info for db
+create urmom
+create user
+create user set email = 'edwardmcconkie@gmail.com'
+select * from user
+info for db
+select * from migration
+create migration set name = '001-delete-something.surql'
+select * from migration
+select * from migrations
+select * from migration
+delete migration
+select * from migration
+delete migration
+select * from migration
+select value name from migration order by name asc
+select * from migration
+select * from migration order by name
+select * from user
+create user
+select * from migration
+delete migration where name < '1'
+select * from migration
+delete migration:on2nsnx03a76wkc5g7rg
+select * from migration
+delete migration
