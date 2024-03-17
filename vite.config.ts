@@ -17,4 +17,7 @@ export default defineConfig({
 		},
 	},
 	plugins: [UnoCSS({ extractors: [extractorSvelte()] }), sveltekit()],
+	optimizeDeps: {
+		exclude: ['bits-ui'],
+	},
 });
