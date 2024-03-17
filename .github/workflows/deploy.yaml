@@ -43,7 +43,6 @@ jobs:
           SURREAL_USER: ${{ secrets.SURREAL_USER }}
           SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
         run: bun db:create
-        working-directory: ./surreal
 
       - name: Cleanup
         if: failure()
