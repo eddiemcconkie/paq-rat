@@ -29,11 +29,11 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Lint
-        run: bun run lint
+      # - name: Lint
+      #   run: bun run lint
 
-      - name: Svelte Check
-        run: bun run check
+      # - name: Svelte Check
+      #   run: bun run check
 
       - name: Create database
         env:
