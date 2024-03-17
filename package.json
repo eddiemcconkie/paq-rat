@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "db:start": "bun db/scripts/start.ts",
     "db:create": "bun db/scripts/create-db.ts",
-    "db:sql": "surreal sql --ns $PUBLIC_SURREAL_NS --db $PUBLIC_SURREAL_DB --pretty",
+    "db:sql": "bun db/scripts/sql.ts",
     "db:migrate": "bun db/scripts/migrate.ts",
     "db:new-migration": "bun db/scripts/new-migration.ts"
   },
