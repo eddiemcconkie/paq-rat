@@ -42,12 +42,14 @@
 					<span>Invite</span>
 				</Button>
 			</li>
-			<li>
-				<Button href="/repl" class="full-width">
-					<Icon class="i-lucide:terminal" />
-					<span>REPL</span>
-				</Button>
-			</li>
+			{#if import.meta.env.DEV}
+				<li>
+					<Button href="/repl" class="full-width">
+						<Icon class="i-lucide:terminal" />
+						<span>REPL</span>
+					</Button>
+				</li>
+			{/if}
 			<li>
 				<Button href="/print" class="full-width">
 					<Icon class="i-lucide:printer" />
