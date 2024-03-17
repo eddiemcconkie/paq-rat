@@ -1,17 +1,9 @@
 import { resolve } from 'path';
-// import { spawn } from 'child_process';
 
-export function startSurreal() {
-	return Bun.spawn([
-		'surreal',
-		'start',
-		'--auth',
-		'--strict',
-		'--no-banner',
-		`file:${resolve(import.meta.dir, '..', '..', 'data')}`,
-	]);
+export function startSurreal(path: string) {
+	return Bun.spawn(['surreal', 'start', '--auth', '--strict', '--no-banner', `file:${path}`]);
 }
 
-if (import.meta.path === Bun.main) {
-	startSurreal();
+if (import.meta.path === Bun?.main) {
+	startSurreal(resolve(import.meta.dir, '..', 'data'));
 }

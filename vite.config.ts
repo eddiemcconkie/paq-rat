@@ -1,25 +1,20 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig, type Plugin } from 'vite';
-// import { ChildProcess, spawn } from 'child_process';
-import { startSurreal } from './db/scripts/start';
-import type { Subprocess } from 'bun';
+import extractorSvelte from '@unocss/extractor-svelte';
+import browserslist from 'browserslist';
+import { browserslistToTargets } from 'lightningcss';
+import UnoCSS from 'unocss/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [surrealPlugin(), sveltekit()],
+	build: {
+		cssMinify: 'lightningcss',
+	},
+	css: {
+		transformer: 'lightningcss',
+		lightningcss: {
+			drafts: { customMedia: true },
+			targets: browserslistToTargets(browserslist('defaults')),
+		},
+	},
+	plugins: [UnoCSS({ extractors: [extractorSvelte()] }), sveltekit()],
 });
-
-function surrealPlugin(): Plugin {
-	let surrealProcess: Subprocess;
-
-	return {
-		name: 'start surrealdb',
-		configureServer({ config: { command } }) {
-			if (command !== 'serve') return;
-
-			surrealProcess = startSurreal();
-		},
-		buildEnd() {
-			surrealProcess.kill();
-		},
-	};
-}

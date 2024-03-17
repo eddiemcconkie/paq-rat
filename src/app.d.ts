@@ -9,10 +9,14 @@ declare global {
 		interface Locals {
 			user: import('lucia').User | null;
 			session: import('lucia').Session | null;
-			db: DB;
-			surrealToken: string;
+			db: DB | null;
+			surrealToken: string | null;
+			selectedGroupId: string | null;
 		}
-		// interface PageData {}
+		interface PageData {
+			user: import('lucia').User | null;
+			surrealToken: string | null;
+		}
 		// interface PageState {}
 		// interface Platform {}
 	}

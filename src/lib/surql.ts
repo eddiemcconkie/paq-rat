@@ -1,7 +1,6 @@
 import { PUBLIC_SURREAL_DB, PUBLIC_SURREAL_HOST, PUBLIC_SURREAL_NS } from '$env/static/public';
 import { Surreal } from 'surrealdb.js';
-import type { SafeParseReturnType, z } from 'zod';
-import { User } from './schema/user';
+import type { z } from 'zod';
 
 class SurQL {
 	constructor(
@@ -13,7 +12,7 @@ class SurQL {
 
 export function surql(strings: TemplateStringsArray, ...args: unknown[]) {
 	let query = strings[0] ?? '';
-	let params: Record<string, string> = {};
+	let params: Record<string, any> = {};
 	args.forEach((value, i) => {
 		if (value instanceof SurQL) {
 			query = query.concat(value.query, strings[i + 1] ?? '');
@@ -22,7 +21,8 @@ export function surql(strings: TemplateStringsArray, ...args: unknown[]) {
 			const id = crypto.randomUUID().replaceAll('-', '').slice(0, 6);
 			const paramName = `_${id}`;
 			query = query.concat('$', paramName, strings[i + 1] ?? '');
-			params[paramName] = JSON.stringify(value);
+			// params[paramName] = JSON.stringify(value);
+			params[paramName] = value;
 		}
 	});
 	return new SurQL(query, params);
@@ -37,11 +37,17 @@ type RawQueryResult =
 	| RawQueryResult[]
 	| Record<string | number | symbol, unknown>;
 
-type MapSafeParseReturnTypes<T extends z.ZodTypeAny[]> = T extends [
+// type MapSafeParseReturnTypes<T extends z.ZodTypeAny[]> = T extends [
+// 	infer First extends z.ZodTypeAny,
+// 	...infer Rest extends z.ZodTypeAny[],
+// ]
+// 	? [SafeParseReturnType<z.input<First>, z.output<First>>, MapSafeParseReturnTypes<Rest>]
+// 	: T;
+type MapZodOutput<T extends z.ZodTypeAny[]> = T extends [
 	infer First extends z.ZodTypeAny,
 	...infer Rest extends z.ZodTypeAny[],
 ]
-	? [SafeParseReturnType<z.input<First>, z.output<First>>, MapSafeParseReturnTypes<Rest>]
+	? [z.output<First>, ...MapZodOutput<Rest>]
 	: T;
 
 export class DB extends Surreal {
@@ -51,17 +57,13 @@ export class DB extends Surreal {
 	}
 	async zodQuery<TSchemas extends z.ZodTypeAny[]>(surql: SurQL, ...schemas: TSchemas) {
 		let responses = await super.query(surql.query, surql.params);
-		console.log(responses);
 		if (!Array.isArray(responses)) {
 			responses = [responses];
 		}
 		if (responses.length !== schemas.length) {
 			throw new Error('The number of SurQL statements does not match the number of Zod schemas');
 		}
-
-		return responses.map((response, i) =>
-			schemas[i].safeParse(response),
-		) as MapSafeParseReturnTypes<TSchemas>;
+		return responses.map((response, i) => schemas[i].parse(response)) as MapZodOutput<TSchemas>;
 	}
 }
 
@@ -77,7 +79,7 @@ type Auth =
 
 export async function connect(auth: Auth) {
 	const db = new DB();
-	await db.connect(PUBLIC_SURREAL_HOST, {
+	await db.connect(PUBLIC_SURREAL_HOST + '/rpc', {
 		namespace: PUBLIC_SURREAL_NS,
 		database: PUBLIC_SURREAL_DB,
 	});
@@ -86,7 +88,7 @@ export async function connect(auth: Auth) {
 		await db.authenticate(auth.token);
 		token = auth.token;
 	} else if (auth.type === 'sessionId') {
-		token = await db.signin({ scope: 'user', sessionId: '' });
+		token = await db.signin({ scope: 'user', sessionId: auth.sessionId });
 	}
 	return { db, token };
 }

@@ -3,7 +3,7 @@ DEFINE TABLE session SCHEMAFULL
 ;
 
 DEFINE FIELD userId ON session
-  TYPE string
+  TYPE record<user>
 ;
 
 DEFINE FIELD expiresAt ON session

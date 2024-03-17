@@ -1,0 +1,58 @@
+name: Deploy app
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'surreal/**'
+      - 'schema/**'
+      - '.github/workflows/deploy.yaml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install SurrealDB
+        run: |
+          curl -sSf https://install.surrealdb.com | sh
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Lint
+        run: pnpm lint
+        working-directory: ./app
+      
+      - name: Svelte Check
+        run: pnpm check
+        working-directory: ./app
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ./surreal
+
+      - name: Run script
+        env:
+          PUBLIC_SURREAL_HOST: ${{ secrets.PUBLIC_SURREAL_HOST }}
+          PUBLIC_SURREAL_NS: ${{ secrets.PUBLIC_SURREAL_NS }}
+          PUBLIC_SURREAL_DB: ${{ secrets.PUBLIC_SURREAL_DB }}
+          SURREAL_USER: ${{ secrets.SURREAL_USER }}
+          SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
+        run: pnpm import-all
+        working-directory: ./surreal
+
+      - name: Cleanup
+        if: failure()
+        run: |

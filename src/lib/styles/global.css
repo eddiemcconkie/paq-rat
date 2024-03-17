@@ -1,0 +1,84 @@
+/* postcss-ignore */
+@import './modern-css-reset.css' layer(reset);
+@import './utopia.css' layer(base);
+@import './surfaces.css' layer(base);
+@import './card.css' layer(components);
+@import './utilities.css' layer(utilities);
+
+html {
+	--black: #232323;
+	--black-1: #3c3c3c;
+	--black-2: #464646;
+	--orange: #ff9946;
+	--yellow: #ffb950;
+	--green: #5fbb97;
+	--blue: #628cd3;
+	--light-blue: #d8e6ff;
+	--lighter-blue: #eef5ff;
+	--white-1: #f6f6f6;
+	accent-color: var(--orange);
+	font-weight: 300;
+	font-size: var(--step-0);
+	font-family: Rubik, system-ui;
+}
+
+body {
+	height: 100vh;
+}
+
+/* h1,
+h2,
+h3,
+button {
+	font-family: Rubik;
+} */
+h1,
+h2,
+h3 {
+	font-weight: 700;
+}
+h1 {
+	font-size: var(--step-4);
+}
+/* button {
+	font-weight: lighter;
+} */
+
+a:hover,
+a:focus-visible {
+	color: var(--orange);
+}
+
+pre {
+	overflow-x: auto;
+}
+
+input {
+	border: 0;
+	border-radius: var(--space-2xs);
+	background-color: color-mix(in oklab, white 70%, transparent);
+	/* background-color: color-mix(in oklab, white 30%, transparent); */
+	--uno: px-xs py-2xs;
+	/* outline-color: transparent; */
+	transition: all 100ms ease-in-out;
+	/* transition: outline-offset 0.2s ease-in-out; */
+	/* outline-color: var(--orange); */
+	outline: 0;
+	font-size: var(--step--1);
+
+	&:focus-visible {
+		background-color: white;
+		/* outline-offset: var(--space-3xs); */
+	}
+}
+::placeholder {
+	--uno: 'color-black/60 step--1';
+	font-style: italic;
+}
+
+mark {
+	--uno: 'bg-light-blue/80';
+	mix-blend-mode: multiply;
+	outline: 0.15em solid color-mix(in oklab, var(--light-blue) 80%, transparent);
+	border-radius: 0.05em;
+}

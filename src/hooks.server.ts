@@ -1,4 +1,7 @@
-import { lucia } from '$lib/server/auth/auth';
+import { lucia } from '$lib/server/auth/lucia';
+import { connect, surql } from '$lib/surql';
+import { record } from '$lib/validators/id';
+import { groupCookie } from './cookies.server';
 
 export async function handle({ event, resolve }) {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
@@ -25,16 +28,25 @@ export async function handle({ event, resolve }) {
 	}
 	event.locals.user = user;
 	event.locals.session = session;
-	return resolve(event);
 
-	// const rootDb = new Surreal();
-	// const userDb = new Surreal();
-	// await db.connect('', {});
-	// event.locals.rootDb = userDb;
-	// event.locals.userDb = userDb;
-	// const { db, token } = await connect({ type: 'sessionId', sessionId: '' });
-	// event.locals.db = db;
-	// event.locals.surrealToken = token;
+	if (session) {
+		const { db, token } = await connect({ type: 'sessionId', sessionId: session.id });
+		event.locals.db = db;
+		event.locals.surrealToken = token;
+
+		// Get the currently selected group, or default to the user's group
+		const groupIdCookie = groupCookie.get(event.cookies);
+		const [groupId] = await db.zodQuery(
+			surql`
+				fn::group_for_container(type::thing('container', ${event.params.containerId}))
+				OR type::thing('group', ${groupIdCookie}).id \
+				OR fn::owned_group()
+			`,
+			record(),
+		);
+		event.locals.selectedGroupId = groupId;
+		groupCookie.set(event.cookies, groupId);
+	}
 
 	return resolve(event);
 }

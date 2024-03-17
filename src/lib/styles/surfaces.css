@@ -1,0 +1,19 @@
+.surface-0 {
+	background-color: light-dark(white, var(--black));
+	color: light-dark(var(--black), white);
+}
+.surface-1 {
+	background-color: light-dark(white, var(--black-1));
+	color: light-dark(var(--black), var(--white-1));
+}
+
+.surface-primary {
+	/* background-color: var(--orange); */
+	background: linear-gradient(45deg, var(--orange) 0%, var(--yellow) 100%);
+	color: var(--black);
+}
+
+/* .surface-secondary {
+	background: var(--lighter-blue);
+	color: var(--black);
+} */

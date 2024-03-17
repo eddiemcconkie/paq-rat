@@ -1,6 +1,7 @@
 DEFINE TABLE user SCHEMAFULL
-  PERMISSIONS NONE
-  -- In the future, this will change to people in your family/group
+  PERMISSIONS
+    FOR select
+      WHERE id INSIDE $auth->belongs_to->group<-belongs_to<-user
 ;
 
 DEFINE FIELD googleId ON user

@@ -1,0 +1,14 @@
+.card {
+	background: white;
+	--uno: 'radius-2xs';
+}
+
+.card.with-shadow {
+	--box-shadow: 0 3px 5px 1px color-mix(in oklab, var(--black) 20%, transparent);
+	/* --box-shadow: 0 3px 5px 1px color-mix(in oklab, var(--black) 10%, transparent); */
+	box-shadow: var(--box-shadow);
+}
+.card.on-primary {
+	--box-shadow: 0 3px 5px 1px color-mix(in oklab, var(--black) 10%, transparent),
+		0 3px 10px color-mix(in oklab, var(--orange) 90%, transparent);
+}
