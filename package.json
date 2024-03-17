@@ -47,7 +47,7 @@
     "flexsearch": "^0.7.43",
     "googleapis": "^131.0.0",
     "lucia": "^3.0.1",
-    "oslo": "^0.27.1",
+    "oslo": "latest",
     "qr-code-styling": "latest",
     "qr-scanner": "^1.4.2",
     "surrealdb.js": "^0.11.0",
