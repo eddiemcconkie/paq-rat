@@ -117,7 +117,7 @@
 	:global(body) {
 		display: flex;
 		flex-direction: column;
-		height: 100vh;
+		height: 100dvh;
 		overflow-y: hidden;
 	}
 	main {
