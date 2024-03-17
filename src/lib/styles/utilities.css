@@ -10,7 +10,6 @@
 
 .flow > * + * {
 	margin-top: var(--flow-space, 1em);
-	background: red;
 }
 
 .full-height {
