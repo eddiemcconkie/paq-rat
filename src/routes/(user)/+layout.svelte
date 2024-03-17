@@ -27,7 +27,7 @@
 <main>{@render children()}</main>
 
 {#if menuOpen}
-	<nav class="theme-dark surface-0" transition:slide|global={{ duration: 200, easing: circOut }}>
+	<nav class="theme-dark surface-0" transition:slide={{ duration: 200, easing: circOut }}>
 		<ul role="list">
 			<!-- <li>
 				<Button href="/account" class="full-width">
@@ -118,7 +118,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100dvh;
-		overflow-y: hidden;
+		overflow-y: clip;
 	}
 	main {
 		flex: 1;
