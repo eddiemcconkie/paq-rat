@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'app/**'
-      - 'surreal/**'
-      - 'schema/**'
-      - '.github/workflows/deploy.yaml'
   workflow_dispatch:
 
 jobs:
@@ -28,29 +23,26 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Install bun
+        run: npm install -g bun
 
       - name: Lint
-        run: pnpm lint
-        working-directory: ./app
-      
+        run: bun run lint
+
       - name: Svelte Check
-        run: pnpm check
-        working-directory: ./app
+        run: bun run check
 
       - name: Install dependencies
-        run: pnpm install
-        working-directory: ./surreal
+        run: bun install
 
-      - name: Run script
+      - name: Create database
         env:
           PUBLIC_SURREAL_HOST: ${{ secrets.PUBLIC_SURREAL_HOST }}
           PUBLIC_SURREAL_NS: ${{ secrets.PUBLIC_SURREAL_NS }}
           PUBLIC_SURREAL_DB: ${{ secrets.PUBLIC_SURREAL_DB }}
           SURREAL_USER: ${{ secrets.SURREAL_USER }}
           SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
-        run: pnpm import-all
+        run: bun db:create
         working-directory: ./surreal
 
       - name: Cleanup
